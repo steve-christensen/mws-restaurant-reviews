@@ -43,10 +43,18 @@ h1, h2, h3, h4, h5, h6 {
 article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
 main {
 /*  background-color: #f3f3f3; */
+  display: flex;
+	flex-direction: column;
+	align-content: center;
 	background-color: #333;
   min-height: 100%;
+}
+
+section {
+	width: 100%;
 }
 
 footer {
@@ -117,6 +125,9 @@ nav h1 a {
 /* ====================== Restaurant Filtering ====================== */
 
 .filter-options {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
   width: 100%;
   background-color: #333;
   align-items: center;
@@ -127,8 +138,9 @@ nav h1 a {
   font-size: 1.3em;
   font-weight: normal;
   line-height: 1;
-	margin: 0;
-  padding: 8px 20px 0;
+	padding: 10px 10px 0;
+	display: block;
+	width: 100%;
 }
 
 /* put the labels offscreen, but visible to screen readers */
@@ -144,18 +156,20 @@ nav h1 a {
   font-size: 1em;
   height: 35px;
   letter-spacing: 0;
-  margin: 10px;
-  padding: 0 10px;
+  margin: 0 10px 10px;
   width: 200px;
 }
 
 /* ====================== Restaurant Listing ====================== */
 #restaurants-list {
+	display: flex;
+	flex-wrap: wrap;
   background-color: #f3f3f3;
   list-style: outside none none;
   margin: 0;
-  padding: 30px 15px 60px;
-  text-align: center;
+  padding: 30px 15px 30px;
+  align-items: stretch;
+	justify-content: space-evenly;
 }
 
 #restaurants-list li {
