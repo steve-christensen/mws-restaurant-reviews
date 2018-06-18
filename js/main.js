@@ -164,7 +164,7 @@ createRestaurantHTML = (restaurant) => {
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.src = DBHelper.imageUrlForRestaurant(restaurant).replace(".","-320_sm.");
 
   // Add an alt attribute for images. Use "image_desc" if available, if not use
   // restaurant name.

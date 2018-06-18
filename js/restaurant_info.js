@@ -94,7 +94,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.src = DBHelper.imageUrlForRestaurant(restaurant).replace('.','-800_lg.');
 
   // Add an alt attribute for images. Use "image_desc" if available, if not use
   // restaurant name.
