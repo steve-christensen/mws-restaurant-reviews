@@ -49,6 +49,7 @@ main {
   display: flex;
 	flex-direction: column;
 	align-content: center;
+	align-items: center;
 	background-color: #333;
   min-height: 100%;
 }
@@ -120,17 +121,37 @@ nav h1 a {
 #map {
   height: 400px;
   width: 100%;
-  background-color: #ccc;
+  background-color: #f3f3f3;
+}
+
+/* make some space on the sides to allow srolling the page
+   without scrolling the map on touch screens,. */
+.map-container {
+	width: calc(100% - 48px);
+}
+
+/* adjust height and set a margin around the map to simplify scrolling on small screens */
+@media screen and (max-height: 400px) {
+	#map {
+		height: 100vh;
+	}
 }
 /* ====================== Restaurant Filtering ====================== */
+
+.list-results {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
 
 .filter-options {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-  width: 100%;
+  width: calc(100% - 48px);
   background-color: #333;
   align-items: center;
+	margin: 20px 0 0;
 }
 
 .filter-options h2 {
@@ -138,7 +159,6 @@ nav h1 a {
   font-size: 1.3em;
   font-weight: normal;
   line-height: 1;
-	padding: 10px 10px 0;
 	display: block;
 	width: 100%;
 }
@@ -156,10 +176,13 @@ nav h1 a {
   font-size: 1em;
   height: 35px;
   letter-spacing: 0;
-  margin: 0 10px 10px;
   width: 200px;
+	margin-bottom: 20px;
 }
 
+.filter-options select:first-of-type {
+	margin-right: 36px;
+}
 /* ====================== Restaurant Listing ====================== */
 #restaurants-list {
 	display: flex;
@@ -167,6 +190,7 @@ nav h1 a {
   background-color: #f3f3f3;
   list-style: outside none none;
   margin: 0;
+	width: 100%;
   padding: 30px 15px 30px;
   align-items: stretch;
 	justify-content: space-evenly;
