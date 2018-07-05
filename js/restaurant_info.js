@@ -37,6 +37,9 @@ initMap = () => {
       }).addTo(newMap);
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
+
+      // Take map attributions out of tab sequence
+      removeMapAttributionsFromTabOrder();
     }
   });
 }
@@ -92,13 +95,23 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
 
+  const imageMd = document.getElementById('restaurant-img-md');
+  imageMd.setAttribute('srcset', DBHelper.imageUrlForRestaurant(restaurant).replace('.','-560_md.'));
+
+  const imageLg = document.getElementById('restaurant-img-lg');
+  imageLg.setAttribute('srcset', DBHelper.imageUrlForRestaurant(restaurant).replace('.','-800_lg.'));
+
   const image = document.getElementById('restaurant-img');
-  image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant).replace('.','-800_lg.');
+  image.src = DBHelper.imageUrlForRestaurant(restaurant).replace('.','-320_sm.');
 
   // Add an alt attribute for images. Use "image_desc" if available, if not use
   // restaurant name.
   image.alt = restaurant.image_desc ? restaurant.image_desc : restaurant.name;
+
+  const fig = document.querySelector('figure');
+  const figCaption = document.createElement('figcaption');
+  figCaption.innerHTML =  restaurant.image_desc ? restaurant.image_desc : restaurant.name;
+  fig.append(figCaption);
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -109,6 +122,16 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   }
   // fill reviews
   fillReviewsHTML();
+}
+
+/**
+ * Don't include map attributions in the tab sequence
+ */
+removeMapAttributionsFromTabOrder = () => {
+  const linkList = document.querySelectorAll(".leaflet-control-attribution a");
+  linkList.forEach(link => {
+    link.setAttribute('tabindex', '-1');
+  })
 }
 
 /**
@@ -169,9 +192,20 @@ createReviewHTML = (review) => {
   li.appendChild(date);
 
   const rating = document.createElement('p');
-  rating.setAttribute('rating', review.rating);
-/*  rating.innerHTML = "Rating = "; */
+  if (Number.isInteger(review.rating) && 0 < review.rating && review.rating < 6) {
+    const offscreenRating = document.createElement('p');
+    offscreenRating.className = 'rating-offscreen';
+    offscreenRating.innerHTML = 'Rating: ' + review.rating + ' stars';
+    li.appendChild(offscreenRating);
+
+    rating.setAttribute('rating', review.rating);
+  }
+  else {
+    rating.innerHTML = 'unrated';
+    rating.setAttribute('rating', 'invalid');
+  }
   li.appendChild(rating);
+
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;

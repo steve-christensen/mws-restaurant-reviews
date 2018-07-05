@@ -1,14 +1,20 @@
 /*
+ * 2018-07-04
+ *  - Add paragraph to hold text for restaurant list detail link
+ *    to make it easier to center vertically
+ *
  * 2018-06-15
  *  - Add code for alt attributes on images. Use image_desc if available.
  *    If not, use restaruant name.
-
  */
+
 let restaurants,
   neighborhoods,
-  cuisines
-var newMap
-var markers = []
+  cuisines;
+let newMap;
+let markers = [];
+
+const mapAvailable = L;
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -38,10 +44,13 @@ fetchNeighborhoods = () => {
  */
 fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
-  neighborhoods.forEach(neighborhood => {
+  neighborhoods.forEach((neighborhood, idx) => {
     const option = document.createElement('option');
+    option.id = "neighborhood-" + idx;
     option.innerHTML = neighborhood;
     option.value = neighborhood;
+    option.setAttribute('role', 'option');
+    option.setAttribute('aria-selected', 'false');
     select.append(option);
   });
 }
@@ -66,10 +75,13 @@ fetchCuisines = () => {
 fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById('cuisines-select');
 
-  cuisines.forEach(cuisine => {
+  cuisines.forEach((cuisine, idx) => {
     const option = document.createElement('option');
+    option.id = "cuisine-" + idx;
     option.innerHTML = cuisine;
     option.value = cuisine;
+    option.setAttribute('role', 'option');
+    option.setAttribute('aria-selected', 'false');
     select.append(option);
   });
 }
@@ -78,21 +90,27 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
  * Initialize leaflet map, called from HTML.
  */
 initMap = () => {
-  self.newMap = L.map('map', {
-        center: [40.722216, -73.987501],
-        zoom: 12,
-        scrollWheelZoom: false
-      });
-  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-    mapboxToken: 'pk.eyJ1Ijoic2RjcnVubmVyIiwiYSI6ImNqaWJyZXp5dTB4bWozbHM2YjZrdW43MjMifQ.EowtKHnQ02BnpcwWvnJNWA',
-    maxZoom: 18,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox.streets'
-  }).addTo(newMap);
+  if (L) {
+    self.newMap = L.map('map', {
+          center: [40.722216, -73.987501],
+          zoom: 12,
+          scrollWheelZoom: false
+        });
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
+      mapboxToken: 'pk.eyJ1Ijoic2RjcnVubmVyIiwiYSI6ImNqaWJyZXp5dTB4bWozbHM2YjZrdW43MjMifQ.EowtKHnQ02BnpcwWvnJNWA',
+      maxZoom: 18,
+      attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      id: 'mapbox.streets'
+    }).addTo(newMap);
 
-  updateRestaurants();
+    updateRestaurants();
+  }
+/*  else {
+    document.getElementById()
+  }
+*/
 }
 /* window.initMap = () => {
   let loc = {
@@ -154,6 +172,19 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
     ul.append(createRestaurantHTML(restaurant));
   });
   addMarkersToMap();
+
+  // Don't include map attributions in the tab sequence
+  removeMapAttributionsFromTabOrder();
+}
+
+/**
+ * Don't include map attributions in the tab sequence
+ */
+removeMapAttributionsFromTabOrder = () => {
+  const linkList = document.querySelectorAll(".leaflet-control-attribution a");
+  linkList.forEach(link => {
+    link.setAttribute('tabindex', '-1');
+  })
 }
 
 /**
@@ -184,10 +215,14 @@ createRestaurantHTML = (restaurant) => {
   address.innerHTML = restaurant.address;
   li.append(address);
 
+  // Put the link text in a paragraph tag
+  // to make it easier to center vertically.
   const more = document.createElement('a');
-  more.innerHTML = 'View Details';
+  const moreP = document.createElement('p');
+  moreP.innerHTML = restaurant.name + ' Details';
+  more.append(moreP);
   more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more)
+  li.append(more);
 
   return li
 }
