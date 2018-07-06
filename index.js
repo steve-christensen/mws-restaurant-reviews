@@ -5,7 +5,7 @@
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js', {scope: '/'}).then(function(registration) {
 
-    let serviceWorker;
+    var serviceWorker;
     if (registration.installing) {
       serviceWorker = registration.installing;
     } else if (registration.waiting) {
