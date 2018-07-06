@@ -1,18 +1,14 @@
 /*
- * 2018-07-04
- *  - Add paragraph to hold text for restaurant list detail link
- *    to make it easier to center vertically
- *
  * 2018-06-15
  *  - Add code for alt attributes on images. Use image_desc if available.
  *    If not, use restaruant name.
- */
 
+ */
 let restaurants,
   neighborhoods,
   cuisines;
-let newMap;
-let markers = [];
+var newMap;
+var markers = [];
 
 const mapAvailable = L;
 
@@ -90,23 +86,21 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
  * Initialize leaflet map, called from HTML.
  */
 initMap = () => {
-  if (L) {
-    self.newMap = L.map('map', {
-          center: [40.722216, -73.987501],
-          zoom: 12,
-          scrollWheelZoom: false
-        });
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-      mapboxToken: 'pk.eyJ1Ijoic2RjcnVubmVyIiwiYSI6ImNqaWJyZXp5dTB4bWozbHM2YjZrdW43MjMifQ.EowtKHnQ02BnpcwWvnJNWA',
-      maxZoom: 18,
-      attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      id: 'mapbox.streets'
-    }).addTo(newMap);
+  self.newMap = L.map('map', {
+        center: [40.722216, -73.987501],
+        zoom: 12,
+        scrollWheelZoom: false
+      });
+  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
+    mapboxToken: 'pk.eyJ1Ijoic2RjcnVubmVyIiwiYSI6ImNqaWJyZXp5dTB4bWozbHM2YjZrdW43MjMifQ.EowtKHnQ02BnpcwWvnJNWA',
+    maxZoom: 18,
+    attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox.streets'
+  }).addTo(newMap);
 
-    updateRestaurants();
-  }
+  updateRestaurants();
 /*  else {
     document.getElementById()
   }
@@ -158,7 +152,9 @@ resetRestaurants = (restaurants) => {
   ul.innerHTML = '';
 
   // Remove all map markers
-  self.markers.forEach(m => m.setMap(null));
+  if (self.markers) {
+    self.markers.forEach(m => m.remove());
+  }
   self.markers = [];
   self.restaurants = restaurants;
 }
@@ -173,12 +169,12 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
   });
   addMarkersToMap();
 
-  // Don't include map attributions in the tab sequence
+  // Don't include mapp attributions in the tab sequence
   removeMapAttributionsFromTabOrder();
 }
 
 /**
- * Don't include map attributions in the tab sequence
+ * Don't include map attributions in the tab order
  */
 removeMapAttributionsFromTabOrder = () => {
   const linkList = document.querySelectorAll(".leaflet-control-attribution a");
@@ -215,8 +211,7 @@ createRestaurantHTML = (restaurant) => {
   address.innerHTML = restaurant.address;
   li.append(address);
 
-  // Put the link text in a paragraph tag
-  // to make it easier to center vertically.
+  // Put the link text in a paragraph tag for vertiacl
   const more = document.createElement('a');
   const moreP = document.createElement('p');
   moreP.innerHTML = restaurant.name + ' Details';
@@ -238,6 +233,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     function onClick() {
       window.location.href = marker.options.url;
     }
+    self.markers.push(marker);
   });
 }
 /* addMarkersToMap = (restaurants = self.restaurants) => {
