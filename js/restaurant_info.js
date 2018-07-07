@@ -96,13 +96,13 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   address.innerHTML = restaurant.address;
 
   const imageMd = document.getElementById('restaurant-img-md');
-  imageMd.setAttribute('srcset', DBHelper.imageUrlForRestaurant(restaurant).replace('.','-560_md.'));
+  imageMd.setAttribute('srcset', DBHelper.imageUrlForRestaurant(restaurant).replace('.jpg','-560_md.jpg'));
 
   const imageLg = document.getElementById('restaurant-img-lg');
-  imageLg.setAttribute('srcset', DBHelper.imageUrlForRestaurant(restaurant).replace('.','-800_lg.'));
+  imageLg.setAttribute('srcset', DBHelper.imageUrlForRestaurant(restaurant).replace('.jpg','-800_lg.jpg'));
 
   const image = document.getElementById('restaurant-img');
-  image.src = DBHelper.imageUrlForRestaurant(restaurant).replace('.','-320_sm.');
+  image.src = DBHelper.imageUrlForRestaurant(restaurant).replace('.jpg','-320_sm.jpg');
 
   // Add an alt attribute for images. Use "image_desc" if available, if not use
   // restaurant name.
