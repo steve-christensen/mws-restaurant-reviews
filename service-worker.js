@@ -51,13 +51,13 @@ self.addEventListener('fetch', function(event) {
 function precache() {
   return caches.open(CACHE).then(function (cache) {
     return cache.addAll([
-      '/',
-      '/restaurant.html',
-      '/css/styles.css',
-      '/data/restaurants.json',
-      '/js/dbhelper.js',
-      '/js/main.js',
-      '/js/restaurant_info.js'
+      './',
+      './restaurant.html',
+      './css/styles.css',
+      './data/restaurants.json',
+      './js/dbhelper.js',
+      './js/main.js',
+      './js/restaurant_info.js'
     ]);
   });
 }
