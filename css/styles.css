@@ -268,16 +268,16 @@ nav h1 a {
 	border-top: none;
   border-bottom: 3px solid black;
   color: #222;
-	width: calc(100% - 60px);
+	width: 160px;
   display: flex;
   flex-direction: column;
 	justify-content: center;
 	align-items: center;
   font-size: 1em;
-  padding: 8px 15px;
-	height: 3em;
+  padding: 8px 0;
+	height: 2.5em;
   text-align: center;
-	margin: auto 0;
+	margin: 8px 0 0 0;
   text-decoration: none;
   text-transform: uppercase;
 }
