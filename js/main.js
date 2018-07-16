@@ -213,8 +213,9 @@ createRestaurantHTML = (restaurant) => {
 
   // Put the link text in a paragraph tag for vertiacl
   const more = document.createElement('a');
+  more.setAttribute('aria-label', restaurant.name + ' Details');
   const moreP = document.createElement('p');
-  moreP.innerHTML = restaurant.name + ' Details';
+  moreP.innerHTML = 'View Details';
   more.append(moreP);
   more.href = DBHelper.urlForRestaurant(restaurant);
   li.append(more);

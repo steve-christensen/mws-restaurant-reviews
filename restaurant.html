@@ -28,7 +28,7 @@ Changes:
       <h1><a href="./">Restaurant Reviews</a></h1>
     </nav>
     <!-- Beginning breadcrumb -->
-    <ul id="breadcrumb" >
+    <ul id="breadcrumb" role="navigation" aria-label="Breadcrumb">
       <li><a href="./">Home</a></li>
     </ul>
     <!-- End breadcrumb -->
@@ -41,12 +41,12 @@ Changes:
     <!-- Beginning map -->
     <section class="map-container">
       <p id="map-label">City Map</p>
-      <div id="map"></div>
+      <div id="map" aria-lable="location" role="application"></div>
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->
     <section class="restaurant-container">
-      <h1 id="restaurant-name"></h1>
+      <h2 id="restaurant-name"></h2>
       <figure>
         <picture>
           <source id="restaurant-img-lg" media="(min-width: 561px)">
