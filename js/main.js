@@ -25,11 +25,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
  * Fetch all neighborhoods and set their HTML.
  */
 fetchNeighborhoods = () => {
-  DBHelper.fetchNeighborhoods((error, neighborhoods) => {
+  DBHelper.fetchNeighborhoods((error, results) => {
     if (error) { // Got an error
-      console.error(error);
+      error.then (e => console.error(e));
     } else {
-      self.neighborhoods = neighborhoods;
+      self.neighborhoods = results;
       fillNeighborhoodsHTML();
     }
   });
@@ -55,11 +55,11 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
  * Fetch all cuisines and set their HTML.
  */
 fetchCuisines = () => {
-  DBHelper.fetchCuisines((error, cuisines) => {
+  DBHelper.fetchCuisines((error, results) => {
     if (error) { // Got an error!
-      console.error(error);
+      error.then(e => console.error(e));
     } else {
-      self.cuisines = cuisines;
+      self.cuisines = results;
       fillCuisinesHTML();
     }
   });
@@ -132,14 +132,16 @@ updateRestaurants = () => {
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
 
-  DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
+  DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, results) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      resetRestaurants(restaurants);
-      fillRestaurantsHTML();
+      results.then(restaurants => {
+        resetRestaurants(restaurants);
+        fillRestaurantsHTML();
+      });
     }
-  })
+  });
 }
 
 /**
