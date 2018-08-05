@@ -8,25 +8,25 @@
 ## Stage 1 Changes:
 
  - Home page
-  - Update to use flex boxes to allow the restaurant list to expand to multiple columns when space is available.
-  -
-  - HTML
-   - Placed 'City map' paragraph inside of the map container so that it would be read by screen readers, but not visible.
+    - Update to use flex boxes to allow the restaurant list to expand to multiple columns when space is available.
+
+ - HTML
+    - Placed 'City map' paragraph inside of the map container so that it would be read by screen readers, but not visible.
   - CSS
-   - Made many minor adjustments to improve responsiveness.
-   - Added break points to allow different formatting on detail page based upon screen width.
-   - Added ability to include 1-5 unicode stars in place of the rating.
+    - Made many minor adjustments to improve responsiveness.
+    - Added break points to allow different formatting on detail page based upon screen width.
+    - Added ability to include 1-5 unicode stars in place of the rating.
 
  - 2018-06-15
-  - HTML
-   - Added labels for filter controls
-  - CSS
-   - Adjusted background and foreground colors to allow appropriate contrast levels for accessibility
-   - position filter control labels off offscreen
-   - adjust height on filter control bar to enclose the controls and the 'filter output' heading.
-   - replace #footer and #main with footer and main.
-  - JavaScript
-   - Added code to include alt attributes on images. Look for a property called 'image_desc'. If that property does not exist, use the restaurant name.
+    - HTML
+        - Added labels for filter controls
+    - CSS
+        - Adjusted background and foreground colors to allow appropriate contrast levels for accessibility
+        - position filter control labels off offscreen
+        - adjust height on filter control bar to enclose the controls and the 'filter output' heading.
+        - replace #footer and #main with footer and main.
+    - JavaScript
+        - Added code to include alt attributes on images. Look for a property called 'image_desc'. If that property does not exist, use the restaurant name.
 
 ## Project Overview: Stage 1
 
