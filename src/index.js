@@ -1,9 +1,11 @@
+'use strict';
+
 /**
  * This script will check to see if service workers are available and if so, load the serviceworker.
  */
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js', {scope: location.path}).then(function(registration) {
+  navigator.serviceWorker.register('service-worker.min.js', {scope: location.path}).then(function(registration) {
 
     var serviceWorker;
     if (registration.installing) {

@@ -2,11 +2,14 @@
 ---
 #### _Three Stage Course Material Project - Restaurant Reviews_
 
-## Changes:
+## Stage 2 Changes:
+
+
+## Stage 1 Changes:
 
  - Home page
   - Update to use flex boxes to allow the restaurant list to expand to multiple columns when space is available.
-  - 
+  -
   - HTML
    - Placed 'City map' paragraph inside of the map container so that it would be read by screen readers, but not visible.
   - CSS

@@ -4,8 +4,12 @@
  *    If not, use restaruant name.
  */
 
+import { DBHelper } from '../lib/dbhelper.js';
+
 let restaurant;
 var newMap;
+
+const restaurantDB = new DBHelper();
 
 /**
  * Initialize map as soon as the page is loaded.
@@ -17,7 +21,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 /**
  * Initialize leaflet map
  */
-initMap = () => {
+const initMap = () => {
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
       console.error(error);
@@ -36,7 +40,7 @@ initMap = () => {
         id: 'mapbox.streets'
       }).addTo(newMap);
       fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
+      restaurantDB.mapMarkerForRestaurant(self.restaurant, self.newMap);
 
       // Take map attributions out of tab sequence
       removeMapAttributionsFromTabOrder();
@@ -63,7 +67,7 @@ initMap = () => {
 /**
  * Get current restaurant from page URL.
  */
-fetchRestaurantFromURL = (callback) => {
+const fetchRestaurantFromURL = (callback) => {
   if (self.restaurant) { // restaurant already fetched!
     callback(null, self.restaurant)
     return;
@@ -73,7 +77,7 @@ fetchRestaurantFromURL = (callback) => {
     error = 'No restaurant id in URL'
     callback(error, null);
   } else {
-    DBHelper.fetchRestaurantById(id, (error, result) => {
+    restaurantDB.fetchRestaurantById(id, (error, result) => {
       if (error) {
         console.error(error);
       }
@@ -91,7 +95,7 @@ fetchRestaurantFromURL = (callback) => {
 /**
  * Create restaurant HTML and add it to the webpage
  */
-fillRestaurantHTML = (restaurant = self.restaurant) => {
+const fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
 
@@ -99,13 +103,13 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   address.innerHTML = restaurant.address;
 
   const imageMd = document.getElementById('restaurant-img-md');
-  imageMd.setAttribute('srcset', DBHelper.imageUrlForRestaurant(restaurant).replace('.jpg','-560_md.jpg'));
+  imageMd.setAttribute('srcset', restaurantDB.imageUrlForRestaurant(restaurant).replace('.jpg','-560_md.jpg'));
 
   const imageLg = document.getElementById('restaurant-img-lg');
-  imageLg.setAttribute('srcset', DBHelper.imageUrlForRestaurant(restaurant).replace('.jpg','-800_lg.jpg'));
+  imageLg.setAttribute('srcset', restaurantDB.imageUrlForRestaurant(restaurant).replace('.jpg','-800_lg.jpg'));
 
   const image = document.getElementById('restaurant-img');
-  image.src = DBHelper.imageUrlForRestaurant(restaurant).replace('.jpg','-320_sm.jpg');
+  image.src = restaurantDB.imageUrlForRestaurant(restaurant).replace('.jpg','-320_sm.jpg');
 
   // Add an alt attribute for images. Use "image_desc" if available, if not use
   // restaurant name.
@@ -130,7 +134,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 /**
  * Don't include map attributions in the tab sequence
  */
-removeMapAttributionsFromTabOrder = () => {
+const removeMapAttributionsFromTabOrder = () => {
   const linkList = document.querySelectorAll(".leaflet-control-attribution a");
   linkList.forEach(link => {
     link.setAttribute('tabindex', '-1');
@@ -140,7 +144,7 @@ removeMapAttributionsFromTabOrder = () => {
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
-fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
+const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
   for (let key in operatingHours) {
     const row = document.createElement('tr');
@@ -160,7 +164,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
@@ -182,7 +186,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 /**
  * Create review HTML and add it to the webpage.
  */
-createReviewHTML = (review) => {
+const createReviewHTML = (review) => {
   const li = document.createElement('li');
   const name = document.createElement('p');
   name.innerHTML = review.name;
@@ -221,7 +225,7 @@ createReviewHTML = (review) => {
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
-fillBreadcrumb = (restaurant=self.restaurant) => {
+const fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;
@@ -231,7 +235,7 @@ fillBreadcrumb = (restaurant=self.restaurant) => {
 /**
  * Get a parameter by name from page URL.
  */
-getParameterByName = (name, url) => {
+const getParameterByName = (name, url) => {
   if (!url)
     url = window.location.href;
   name = name.replace(/[\[\]]/g, '\\$&');

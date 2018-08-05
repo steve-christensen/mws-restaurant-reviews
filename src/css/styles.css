@@ -347,8 +347,7 @@ nav h1 a {
 }
 
 .inside #restaurant-img {
-	max-width: 100%;
-	width: auto;
+	width: 100%;
 	height: auto;
 }
 

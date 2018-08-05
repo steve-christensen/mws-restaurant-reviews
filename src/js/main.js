@@ -2,13 +2,17 @@
  * 2018-06-15
  *  - Add code for alt attributes on images. Use image_desc if available.
  *    If not, use restaruant name.
-
  */
+
+import { DBHelper } from '../lib/dbhelper.js';
+
 let restaurants,
   neighborhoods,
   cuisines;
-var newMap;
-var markers = [];
+let newMap;
+let markers = [];
+
+const restaurantDB = new DBHelper();
 
 const mapAvailable = L;
 
@@ -24,8 +28,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 /**
  * Fetch all neighborhoods and set their HTML.
  */
-fetchNeighborhoods = () => {
-  DBHelper.fetchNeighborhoods((error, results) => {
+const fetchNeighborhoods = () => {
+  restaurantDB.fetchNeighborhoods((error, results) => {
     if (error) { // Got an error
       error.then (e => console.error(e));
     } else {
@@ -38,7 +42,7 @@ fetchNeighborhoods = () => {
 /**
  * Set neighborhoods HTML.
  */
-fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
+const fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
   neighborhoods.forEach((neighborhood, idx) => {
     const option = document.createElement('option');
@@ -54,8 +58,8 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
 /**
  * Fetch all cuisines and set their HTML.
  */
-fetchCuisines = () => {
-  DBHelper.fetchCuisines((error, results) => {
+const fetchCuisines = () => {
+  restaurantDB.fetchCuisines((error, results) => {
     if (error) { // Got an error!
       error.then(e => console.error(e));
     } else {
@@ -68,7 +72,7 @@ fetchCuisines = () => {
 /**
  * Set cuisines HTML.
  */
-fillCuisinesHTML = (cuisines = self.cuisines) => {
+const fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById('cuisines-select');
 
   cuisines.forEach((cuisine, idx) => {
@@ -85,7 +89,7 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
 /**
  * Initialize leaflet map, called from HTML.
  */
-initMap = () => {
+const initMap = () => {
   self.newMap = L.map('map', {
         center: [40.722216, -73.987501],
         zoom: 12,
@@ -98,7 +102,9 @@ initMap = () => {
       '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
       'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     id: 'mapbox.streets'
-  }).addTo(newMap);
+  }).addTo(self.newMap);
+
+  newMap = self.newMap;
 
   updateRestaurants();
 /*  else {
@@ -122,7 +128,7 @@ initMap = () => {
 /**
  * Update page and map for current restaurants.
  */
-updateRestaurants = () => {
+const updateRestaurants = () => {
   const cSelect = document.getElementById('cuisines-select');
   const nSelect = document.getElementById('neighborhoods-select');
 
@@ -132,7 +138,7 @@ updateRestaurants = () => {
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
 
-  DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, results) => {
+  restaurantDB.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, results) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
@@ -147,7 +153,7 @@ updateRestaurants = () => {
 /**
  * Clear current restaurants, their HTML and remove their map markers.
  */
-resetRestaurants = (restaurants) => {
+const resetRestaurants = (restaurants) => {
   // Remove all restaurants
   self.restaurants = [];
   const ul = document.getElementById('restaurants-list');
@@ -164,7 +170,7 @@ resetRestaurants = (restaurants) => {
 /**
  * Create all restaurants HTML and add them to the webpage.
  */
-fillRestaurantsHTML = (restaurants = self.restaurants) => {
+const fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
@@ -178,7 +184,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 /**
  * Don't include map attributions in the tab order
  */
-removeMapAttributionsFromTabOrder = () => {
+const removeMapAttributionsFromTabOrder = () => {
   const linkList = document.querySelectorAll(".leaflet-control-attribution a");
   linkList.forEach(link => {
     link.setAttribute('tabindex', '-1');
@@ -188,12 +194,12 @@ removeMapAttributionsFromTabOrder = () => {
 /**
  * Create restaurant HTML.
  */
-createRestaurantHTML = (restaurant) => {
+const createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant).replace(".jpg","-320_sm.jpg");
+  image.src = restaurantDB.imageUrlForRestaurant(restaurant).replace(".jpg","-320_sm.jpg");
 
   // Add an alt attribute for images. Use "image_desc" if available, if not use
   // restaurant name.
@@ -219,7 +225,7 @@ createRestaurantHTML = (restaurant) => {
   const moreP = document.createElement('p');
   moreP.innerHTML = 'View Details';
   more.append(moreP);
-  more.href = DBHelper.urlForRestaurant(restaurant);
+  more.href = restaurantDB.urlForRestaurant(restaurant);
   li.append(more);
 
   return li
@@ -228,10 +234,10 @@ createRestaurantHTML = (restaurant) => {
 /**
  * Add markers for current restaurants to the map.
  */
-addMarkersToMap = (restaurants = self.restaurants) => {
+const addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
-    const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.newMap);
+    const marker = restaurantDB.mapMarkerForRestaurant(restaurant, self.newMap);
     marker.on("click", onClick);
     function onClick() {
       window.location.href = marker.options.url;

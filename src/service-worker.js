@@ -1,9 +1,11 @@
+'use strict';
+
 /**
  * Use Network or Cachce Recipe from ServiceWorker Cookbook
  */
 
 // Update the cache name to force replacement.
-const CACHE = 'restaurant-reviews-v2';
+const CACHE = 'restaurant-reviews-v4';
 
 self.addEventListener('install', function(event) {
   console.log('The service worker is being installed.');
@@ -49,14 +51,15 @@ self.addEventListener('fetch', function(event) {
 
 // Pre-cache the local files.
 function precache() {
+  console.log('Service worker precache.');
   return caches.open(CACHE).then(function (cache) {
     return cache.addAll([
       './',
       './restaurant.html',
-      './css/styles.css',
-      './data/restaurants.json',
-      './js/dbhelper.js',
-      './js/main.js',
+      './css/styles.min.css',
+//      './data/restaurants.json',
+      './js/dbhelper.min.js',
+      './js/main.min.js',
       './js/restaurant_info.js'
     ]);
   });

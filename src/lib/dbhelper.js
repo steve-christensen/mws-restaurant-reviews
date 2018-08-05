@@ -1,37 +1,50 @@
+//import idb from 'idb';
+
 /**
  * Common database helper functions.
  */
 
+/*DATABASE_URL()
 const DATABASE_PORT = 1337;
 const DATABASE_URL = `http://localhost:${DATABASE_PORT}/restaurants`;
 
-class DBHelper {
-
-  /**
-   * Database URL.
-   * Change this to restaurants.json file location on your server.
-   */
-/*  static get DATABASE_URL() {
-    const port = 1337; // Change this to your server port
-    return `http://localhost:${port}/restaurants`;
-//    return 'data/restaurants.json';
-  }
+const LOCAL_DB = 'restaurant-reviews';
+const LOCAL_VERSION = 1;
 */
+
+export class DBHelper {
+
+  constructor () {
+    const DATABASE_PORT = 1337;
+    const DATABASE_URL = `http://localhost:${DATABASE_PORT}/restaurants`;
+
+    const LOCAL_DB = 'restaurant-reviews';
+    const LOCAL_VERSION = 1;
+
+    this.url = DATABASE_URL;
+  }
+
 
   /**
    * Fetch all restaurants.
    */
-  static fetchRestaurants(callback) {
-    fetch(DATABASE_URL)
-      .then(response => callback(null,response.json()))
-      .catch(error => callback(error,null));
+  fetchRestaurants(callback) {
+    fetch(this.url)
+      .then(response => {
+        // TODO: write restaurants to localDb
+        callback(null,response.json());
+      })
+      .catch(error => {
+        // TODO: Return error
+        callback(error,null)}
+      );
   }
 
   /**
    * Fetch a restaurant by its ID.
    */
-  static fetchRestaurantById(id, callback) {
-    let idUrl = `${DATABASE_URL}/${id}`;
+  fetchRestaurantById(id, callback) {
+    let idUrl = `${this.url}/${id}`;
     // fetch all restaurants with proper error handling.
     fetch(idUrl)
       .then (response => callback(null,response.json()))
@@ -41,9 +54,9 @@ class DBHelper {
   /**
    * Fetch restaurants by a cuisine type with proper error handling.
    */
-  static fetchRestaurantByCuisine(cuisine, callback) {
+  fetchRestaurantByCuisine(cuisine, callback) {
     // Fetch all restaurants  with proper error handling
-    DBHelper.fetchRestaurants((error, results) => {
+    this.fetchRestaurants((error, results) => {
       if (error) {
         error.then(e => callback(error, null));
       } else {
@@ -56,9 +69,9 @@ class DBHelper {
   /**
    * Fetch restaurants by a neighborhood with proper error handling.
    */
-  static fetchRestaurantByNeighborhood(neighborhood, callback) {
+  fetchRestaurantByNeighborhood(neighborhood, callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, results) => {
+    this.fetchRestaurants((error, results) => {
       if (error) {
         error.then(e => callback(error, null));
       } else {
@@ -71,9 +84,9 @@ class DBHelper {
   /**
    * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
    */
-  static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
+  fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, results) => {
+    this.fetchRestaurants((error, results) => {
       if (error) {
         callback(error, null);
       } else {
@@ -88,9 +101,9 @@ class DBHelper {
   /**
    * Fetch all neighborhoods with proper error handling.
    */
-  static fetchNeighborhoods(callback) {
+  fetchNeighborhoods(callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, results) => {
+    this.fetchRestaurants((error, results) => {
       if (error) {
         error.then(e => callback(error, null));
       } else {
@@ -108,9 +121,9 @@ class DBHelper {
   /**
    * Fetch all cuisines with proper error handling.
    */
-  static fetchCuisines(callback) {
+  fetchCuisines(callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, results) => {
+    this.fetchRestaurants((error, results) => {
       if (error) {
         error.then(e => callback(error, null));
       } else {
@@ -128,26 +141,26 @@ class DBHelper {
   /**
    * Restaurant page URL.
    */
-  static urlForRestaurant(restaurant) {
+  urlForRestaurant(restaurant) {
     return (`./restaurant.html?id=${restaurant.id}`);
   }
 
   /**
    * Restaurant image URL.
    */
-  static imageUrlForRestaurant(restaurant) {
+  imageUrlForRestaurant(restaurant) {
     return (`./img/${restaurant.photograph ? restaurant.photograph : restaurant.id}.jpg`);
   }
 
   /**
    * Map marker for a restaurant.
    */
-   static mapMarkerForRestaurant(restaurant, map) {
+  mapMarkerForRestaurant(restaurant, map) {
     // https://leafletjs.com/reference-1.3.0.html#marker
     const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng],
       {title: restaurant.name,
       alt: restaurant.name,
-      url: DBHelper.urlForRestaurant(restaurant)
+      url: this.urlForRestaurant(restaurant)
       })
       marker.addTo(newMap);
     return marker;
