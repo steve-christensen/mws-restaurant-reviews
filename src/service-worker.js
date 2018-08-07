@@ -34,19 +34,24 @@ self.addEventListener('activate', function(event) {
 
 // Intercept fetch events and serve from cache if available.
 self.addEventListener('fetch', function(event) {
-  console.log('The service worker is serving the asset: ' + event.request.url);
+  if (event.request && event.request.method && event.request.method == 'GET') {
+    console.log('The service worker is serving the asset: ' + event.request.url);
 
-  event.respondWith(caches.match(event.request, {ignoreSearch: true}).then(function(response) {
-    console.log("Serving response from cache:",event.request.url)
-    if (response && response != undefined && response.body) {
-      return response;
-    }
-    else {
+    event.respondWith(caches.match(event.request, {ignoreSearch: true}).then(function(response) {
+      console.log("Serving response from cache:",event.request.url)
+      if (response && response != undefined && response.body) {
+        return response;
+      }
+      else {
+        return fetchFromNetwork(event.request);
+      }
+    }).catch(function() {
       return fetchFromNetwork(event.request);
-    }
-  }).catch(function() {
+    }));
+  }
+  else {
     return fetchFromNetwork(event.request);
-  }));
+  }
 });
 
 // Pre-cache the local files.
@@ -57,10 +62,8 @@ function precache() {
       './',
       './restaurant.html',
       './css/styles.min.css',
-//      './data/restaurants.json',
-      './js/dbhelper.min.js',
       './js/main.min.js',
-      './js/restaurant_info.js'
+      './js/restaurant_info.min.js'
     ]);
   });
 }
