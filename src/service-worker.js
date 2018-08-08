@@ -5,7 +5,10 @@
  */
 
 // Update the cache name to force replacement.
-const CACHE = 'restaurant-reviews-v6';
+const CACHE = 'restaurant-reviews-v7';
+
+const DATABASE_PORT = 1337;
+const DATABASE_URL = new URL(`http://localhost:${DATABASE_PORT}/restaurants`);
 
 self.addEventListener('install', function(event) {
   console.log('The service worker is being installed.');
@@ -36,7 +39,7 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', function(event) {
   let requestURL = new URL(event.request.url);
 
-  if (requestURL.origin === location.origin && !event.request.url.includes('browser-sync')) {
+  if (requestURL.origin !== DATABASE_URL.origin && !event.request.url.includes('browser-sync')) {
     console.log('The service worker is serving the asset: ' + event.request.url);
 
     event.respondWith(caches.match(event.request, {ignoreSearch: true}).then(function(response) {
