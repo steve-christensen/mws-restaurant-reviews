@@ -30,8 +30,7 @@ const paths = {
     },
     js: {
         src: `${srcRoot}/**/*.js`,
-        main: `${srcRoot}/js/main.js`,
-        restaurant: [`${srcRoot}/js/dbhelper.js`, `${srcRoot}/js/restaurant_info.js`],
+        exclude: `!${srcRoot}/lib/**/*.js`,
         dest: `${buildRoot}/`
     },
     images: {
@@ -72,7 +71,7 @@ gulp.task('copyFiles', () =>
   );
 
 gulp.task('buildJS', function () {
-  return gulp.src([paths.js.src])
+  return gulp.src([paths.js.src,paths.js.exclude])
     .pipe(through2.obj(function (file, enc, next){
             console.log(`Building JS for: ${file.path}`)
             browserify(file.path)
@@ -89,14 +88,12 @@ gulp.task('buildJS', function () {
                 });
         }))
     .pipe(sourcemaps.init({loadMaps: true}))
-/*    .pipe(uglify({ mangle: {
-          reserved: ['updateRestaurants','DBHelper']
-        }
-      }))
-*/
     .pipe(uglify())
     .pipe(sourcemaps.write('./'))
-    .pipe(rename({ suffix: '.min' }))
+    .pipe(rename((path) =>
+      {
+        path.basename += path.extname == '.map' ? '' : '.min';
+      }))
     .pipe(gulp.dest(paths.js.dest));
 });
 
