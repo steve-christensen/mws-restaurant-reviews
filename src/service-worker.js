@@ -5,7 +5,7 @@
  */
 
 // Update the cache name to force replacement.
-const CACHE = 'restaurant-reviews-v4';
+const CACHE = 'restaurant-reviews-v6';
 
 self.addEventListener('install', function(event) {
   console.log('The service worker is being installed.');
@@ -34,7 +34,9 @@ self.addEventListener('activate', function(event) {
 
 // Intercept fetch events and serve from cache if available.
 self.addEventListener('fetch', function(event) {
-  if (event.request && event.request.method && event.request.method == 'GET') {
+  let requestURL = new URL(event.request.url);
+
+  if (requestURL.origin === location.origin && !event.request.url.includes('browser-sync')) {
     console.log('The service worker is serving the asset: ' + event.request.url);
 
     event.respondWith(caches.match(event.request, {ignoreSearch: true}).then(function(response) {
@@ -50,7 +52,7 @@ self.addEventListener('fetch', function(event) {
     }));
   }
   else {
-    return fetchFromNetwork(event.request);
+    return fetch(event.request);
   }
 });
 
@@ -73,11 +75,13 @@ function fetchFromNetwork(request) {
   console.log('Fetching asset from network:', request.url);
   return fetch(request).then(function(response) {
     const r = response.clone();
-    console.log('Caching response:', request.url);
-    caches.open(CACHE).then(function(cache) {
-      console.log('Opened cache:', CACHE);
-      cache.put(request, r);
-    });
+    if (request.method == "GET") {
+      console.log('Caching response:', request.url);
+      caches.open(CACHE).then(function(cache) {
+        console.log('Opened cache:', CACHE);
+        cache.put(request, r);
+      });
+    }
     return response;
   });
 }
