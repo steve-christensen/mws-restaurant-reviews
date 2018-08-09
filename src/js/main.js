@@ -128,6 +128,7 @@ const initMap = () => {
 /**
  * Update page and map for current restaurants.
  */
+//const updateRestaurants = () => {
 const updateRestaurants = () => {
   const cSelect = document.getElementById('cuisines-select');
   const nSelect = document.getElementById('neighborhoods-select');
@@ -255,3 +256,8 @@ const addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 } */
+
+// Expose updateRestaurants for use in window events
+window.updateRestaurants = updateRestaurants;
+
+export { updateRestaurants };
