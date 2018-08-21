@@ -6,9 +6,6 @@
 
 import { DBHelper } from '../lib/dbhelper.js';
 
-let restaurant;
-var newMap;
-
 const restaurantDB = new DBHelper();
 
 /**
@@ -22,10 +19,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
  * Initialize leaflet map
  */
 const initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
+  const id = getParameterByName('id');
+
+  if (!id) {
+    console.log('No restaurant id in URL');
+  }
+  else {
+    restaurantDB.fetchRestaurantById(id).then(restaurant => {
+      fillRestaurantHTML(restaurant);
+
       self.newMap = L.map('map', {
         center: [restaurant.latlng.lat, restaurant.latlng.lng],
         zoom: 16,
@@ -40,57 +42,11 @@ const initMap = () => {
         id: 'mapbox.streets'
       }).addTo(self.newMap);
 
-      newMap = self.newMap;
-
-      fillBreadcrumb();
-      restaurantDB.mapMarkerForRestaurant(self.restaurant, self.newMap);
+      fillBreadcrumb(restaurant);
+      DBHelper.mapMarkerForRestaurant(restaurant, self.newMap);
 
       // Take map attributions out of tab sequence
       removeMapAttributionsFromTabOrder();
-    }
-  });
-}
-
-/* window.initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-    }
-  });
-} */
-
-/**
- * Get current restaurant from page URL.
- */
-const fetchRestaurantFromURL = (callback) => {
-  if (self.restaurant) { // restaurant already fetched!
-    callback(null, self.restaurant)
-    return;
-  }
-  const id = getParameterByName('id');
-  if (!id) { // no id found in URL
-    error = 'No restaurant id in URL'
-    callback(error, null);
-  } else {
-    restaurantDB.fetchRestaurantById(id, (error, result) => {
-      if (error) {
-        console.error(error);
-      }
-      else {
-        result.then(restaurant => {
-          self.restaurant = restaurant;
-          fillRestaurantHTML();
-          callback(null, restaurant)
-        });
-      }
     });
   }
 }
@@ -98,21 +54,23 @@ const fetchRestaurantFromURL = (callback) => {
 /**
  * Create restaurant HTML and add it to the webpage
  */
-const fillRestaurantHTML = (restaurant = self.restaurant) => {
+const fillRestaurantHTML = (restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
 
+  const imageURL = DBHelper.imageUrlForRestaurant(restaurant);
+
   const imageMd = document.getElementById('restaurant-img-md');
-  imageMd.setAttribute('srcset', restaurantDB.imageUrlForRestaurant(restaurant).replace('.jpg','-560_md.jpg'));
+  imageMd.setAttribute('srcset', imageURL.replace('.jpg','-560_md.jpg'));
 
   const imageLg = document.getElementById('restaurant-img-lg');
-  imageLg.setAttribute('srcset', restaurantDB.imageUrlForRestaurant(restaurant).replace('.jpg','-800_lg.jpg'));
+  imageLg.setAttribute('srcset', imageURL.replace('.jpg','-800_lg.jpg'));
 
   const image = document.getElementById('restaurant-img');
-  image.src = restaurantDB.imageUrlForRestaurant(restaurant).replace('.jpg','-320_sm.jpg');
+  image.src = imageURL.replace('.jpg','-320_sm.jpg');
 
   // Add an alt attribute for images. Use "image_desc" if available, if not use
   // restaurant name.
@@ -128,10 +86,10 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   // fill operating hours
   if (restaurant.operating_hours) {
-    fillRestaurantHoursHTML();
+    fillRestaurantHoursHTML(restaurant.operating_hours);
   }
   // fill reviews
-  fillReviewsHTML();
+  fillReviewsHTML(restaurant.reviews);
 }
 
 /**
@@ -147,7 +105,7 @@ const removeMapAttributionsFromTabOrder = () => {
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
-const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
+const fillRestaurantHoursHTML = (operatingHours) => {
   const hours = document.getElementById('restaurant-hours');
   for (let key in operatingHours) {
     const row = document.createElement('tr');
@@ -167,7 +125,7 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+const fillReviewsHTML = (reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
@@ -228,7 +186,7 @@ const createReviewHTML = (review) => {
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
-const fillBreadcrumb = (restaurant=self.restaurant) => {
+const fillBreadcrumb = (restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;
