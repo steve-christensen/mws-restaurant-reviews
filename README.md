@@ -5,9 +5,9 @@
 ## API server
 The stage 2 code expects that the API server (https://github.com/udacity/mws-restaurant-stage-2) is running on local host port 1337. You'll need for fork and clone the project and then start the server with the command:
 
-  '''
+  ```
   node server
-  '''
+  ```
 
 ## Building and serving the app
 
