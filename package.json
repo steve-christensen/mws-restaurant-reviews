@@ -4,6 +4,7 @@
   "description": "Restaurant Project for Udacity Moble Web Specialist course.",
   "main": "index.html",
   "scripts": {
+    "start": "gulp buildAll; cd build; python -m SimpleHTTPServer",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
