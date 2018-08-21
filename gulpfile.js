@@ -12,6 +12,7 @@ const rename = require('gulp-rename');
 const responsive = require('gulp-responsive');
 const concat = require('gulp-concat');
 const browserSync = require('browser-sync');
+const pump = require('pump');
 
 const server = browserSync.create();
 
@@ -21,22 +22,25 @@ const buildRoot = './build';
 // set up file paths
 const paths = {
     html: {
-        src: `${srcRoot}/**/*.html`,
-        dest: `${buildRoot}/`
+      src: `${srcRoot}/**/*.html`,
+      dest: `${buildRoot}/`
     },
     styles: {
-        src: `${srcRoot}/css/**/*.css`,
-        dest: `${buildRoot}/css/`
+      src: `${srcRoot}/css/**/*.css`,
+      dest: `${buildRoot}/css/`
     },
     js: {
-        src: `${srcRoot}/**/*.js`,
-        exclude: `!${srcRoot}/lib/**/*.js`,
-        dest: `${buildRoot}/`
+      src: `${srcRoot}/**/*.js`,
+      exclude: `!${srcRoot}/lib/**/*.js`,
+      dest: `${buildRoot}/`
+    },
+    files: {
+      src: `${srcRoot}/**/*.json`
     },
     images: {
-        src: `${srcRoot}/img_src/*.jpg`,
-        dest: `${buildRoot}/img/`,
-        fixed: `${srcRoot}/img_src/fixed/*.jpg`
+      src: `${srcRoot}/img_src/*.jpg`,
+      dest: `${buildRoot}/img/`,
+      fixed: `${srcRoot}/img_src/fixed/*.*`
     }
 };
 
@@ -66,13 +70,14 @@ const imageQuality = {
 gulp.task('clean', () => del([buildRoot]));
 
 gulp.task('copyFiles', () =>
-  gulp.src([paths.js.src, `${srcRoot}/**/*.css`])
-      .pipe(gulp.dest(paths.js.dest))
+  gulp.src(paths.files.src)
+      .pipe(gulp.dest(buildRoot))
   );
 
-gulp.task('buildJS', function () {
-  return gulp.src([paths.js.src,paths.js.exclude])
-    .pipe(through2.obj(function (file, enc, next){
+gulp.task('buildJS', (cb) => {
+  pump([
+    gulp.src([paths.js.src,paths.js.exclude]),
+    through2.obj(function (file, enc, next){
             console.log(`Building JS for: ${file.path}`)
             browserify(file.path)
                 .transform('babelify')
@@ -86,15 +91,16 @@ gulp.task('buildJS', function () {
                       next(null, file);
                     }
                 });
-        }))
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(uglify())
-    .pipe(sourcemaps.write('./'))
-    .pipe(rename((path) =>
-      {
-        path.basename += path.extname == '.map' ? '' : '.min';
-      }))
-    .pipe(gulp.dest(paths.js.dest));
+        }),
+        sourcemaps.init({loadMaps: true}),
+        uglify(),
+        sourcemaps.write('./'),
+        rename((path) =>
+          {
+            path.basename += path.extname == '.map' ? '' : '.min';
+          }),
+        gulp.dest(paths.js.dest)
+  ],cb);
 });
 
 gulp.task('buildHTML', () =>
@@ -121,7 +127,7 @@ const responsiveImages = () =>
 
 gulp.task('images', gulp.series(cleanImages, copyFixedImages, responsiveImages));
 
-gulp.task('buildAll', gulp.series(['clean',gulp.parallel(['images','buildJS','buildCSS','buildHTML'])]));
+gulp.task('buildAll', gulp.series(['clean',gulp.parallel(['images','buildJS','buildCSS','buildHTML', 'copyFiles'])]));
 
 
 const reload = (done) => {
