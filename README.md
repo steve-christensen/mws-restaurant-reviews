@@ -2,10 +2,48 @@
 ---
 #### _Three Stage Course Material Project - Restaurant Reviews_
 
-## Stage 2 Changes:
+## API server
+The stage 2 code expects that the API server (https://github.com/udacity/mws-restaurant-stage-2) is running on local host port 1337. You'll need for fork and clone the project and then start the server with the command:
 
+  '''
+  node server
+  '''
 
-## Stage 1 Changes:
+## Building and serving the app
+
+### Python SimpleHTTPServer
+
+To build and serve with Python SimpleHTTPServer, enter 'nmp start' from the command line.
+
+### BrowserSync
+
+To launch with BrowserSync, just enter 'gulp' on the command line. The default Gulp tasks will build the application and launch your default browser using BrowserSync. Do not use this method if you're planning to evaluate performance as BrowserSync negatively impacts performance, but it is useful for live editing during development.
+
+## Stage 2 Changes
+
+  - Changed the directory structure to move code to 'src' directory and then build the code in the 'build' directory
+
+  - Build the app with GulpJS
+    - Added GulpJS to do the following:
+      - Copy HTML and manifest files
+      - Minify CSS
+      - Build JS with browserify, babel, and uglify.
+      - Replace the grunt task for responsive images with a gulp-responsive (which in turn uses the sharp node module) to build various sized images
+      - Set watches for HTML, CSS, and JavaScript changes
+      - Launch the browser with BrowserSync
+
+  - dbhelper.js
+    - Updated dbhelper.js to an ES6 module and replaced the callback functions to use promises instead. Also changed the DBHelper class to have attributes and make the fetch methods non-static. The new version will only call out to the API (or service worker) when the constructor loads. After that, it will serve the restaurant data from the class attributes.
+    - Made some minor changes to service-worker.js.
+    - Updated main.js and restaurant_info.js to use the new DBHelper class.
+
+- Progressive Web App Changes
+  - Added a manifest.json file
+  - Added meta tag for theme-color in the HTML files
+  - Added icon images
+  - Added icon and manifest links in the HTML files
+
+## Stage 1 Changes
 
  - Home page
     - Update to use flex boxes to allow the restaurant list to expand to multiple columns when space is available.
