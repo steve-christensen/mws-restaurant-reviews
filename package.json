@@ -45,6 +45,7 @@
     "gulp-responsive": "^2.11.0",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.1",
+    "pump": "^3.0.0",
     "through2": "^2.0.3",
     "vinyl-transform": "^1.0.0"
   }
