@@ -18,16 +18,22 @@ const mapAvailable = L;
  */
 document.addEventListener('DOMContentLoaded', (event) => {
   initMap(); // added
-  fetchNeighborhoods();
-  fetchCuisines();
+//  fetchNeighborhoods();
+//  fetchCuisines();
+// Just call the DBHelper methods directly as wrapping them in a function
+// in this instance does not add value
+  restaurantDB.fetchNeighborhoods().then(neighborhoods => fillNeighborhoodsHTML(neighborhoods));
+  restaurantDB.fetchCuisines().then(cuisines => fillCuisinesHTML(cuisines));
 });
 
 /**
  * Fetch all neighborhoods and set their HTML.
  */
+/* Wrapping the DBHelper calls in a function does not add value
 const fetchNeighborhoods = () => {
   restaurantDB.fetchNeighborhoods().then(neighborhoods => fillNeighborhoodsHTML(neighborhoods));
 }
+*/
 
 /**
  * Set neighborhoods HTML.
@@ -49,9 +55,11 @@ const fillNeighborhoodsHTML = (neighborhoods) => {
 /**
  * Fetch all cuisines and set their HTML.
  */
+ /* Wrapping the DBHelper call in a function does not add value
 const fetchCuisines = () => {
   restaurantDB.fetchCuisines().then(cuisines => fillCuisinesHTML(cuisines));
 }
+*/
 
 /**
  * Set cuisines HTML.
@@ -185,7 +193,7 @@ const createRestaurantHTML = (restaurant) => {
 
   // Add an alt attribute for images. Use "image_desc" if available, if not use
   // restaurant name.
-  image.alt = restaurant.image_desc ? restaurant.image_desc : restaurant.name;
+  image.alt = restaurant.image_desc || restaurant.name;
 
   li.append(image);
 

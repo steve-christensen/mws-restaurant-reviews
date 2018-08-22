@@ -99,6 +99,9 @@ nav h1 a {
     font-size: 1em;
     margin: 0;
     width: calc(50% - 48px);
+		position: fixed;
+		left: 0;
+		top: 80px;
 }
 
 /* Display list items side by side */
