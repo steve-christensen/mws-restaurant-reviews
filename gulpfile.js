@@ -1,5 +1,6 @@
 'use strict';
 
+// Load the dependencies
 const gulp = require('gulp');
 const del = require('del');
 const browserify = require('browserify');
@@ -44,6 +45,7 @@ const paths = {
     }
 };
 
+// Options for building responsive images
 const imageOptions = {
         '*.jpg': [{
             width: 320,
@@ -60,20 +62,25 @@ const imageOptions = {
 
     };
 
+// More responsive image options
 const imageQuality = {
         quality: 70,
         progressive: true,
         withMetadata: false
     };
 
-
+// Task to delete the build directory and start with a blank slate.
 gulp.task('clean', () => del([buildRoot]));
 
+// Copy any files that do not require build
 gulp.task('copyFiles', () =>
   gulp.src(paths.files.src)
       .pipe(gulp.dest(buildRoot))
   );
 
+// Build the Javascript via browserify, babel, and uglify
+// Added pump because it generates better error messages
+// when there are syntax errors in the code.
 gulp.task('buildJS', (cb) => {
   pump([
     gulp.src([paths.js.src,paths.js.exclude]),
@@ -103,10 +110,12 @@ gulp.task('buildJS', (cb) => {
   ],cb);
 });
 
+// Build the HTML, for now, it just copies the files
 gulp.task('buildHTML', () =>
     gulp.src([paths.html.src])
         .pipe(gulp.dest(paths.html.dest)));
 
+// Build the CSS. I could use sass and add that compilation here
 gulp.task('buildCSS', () =>
     gulp.src([paths.styles.src])
         .pipe(clean_css({ sourceMap: true}))
@@ -114,27 +123,34 @@ gulp.task('buildCSS', () =>
         .pipe(rename({ suffix: '.min'}))
         .pipe(gulp.dest(paths.styles.dest)));
 
+// Delete the image target directory
 const cleanImages = () => del([paths.images.dest]);
 
+// Copy images that I manually edited.
+// These won't e replaced by the responsiveImages task
 const copyFixedImages = () =>
     gulp.src([paths.images.fixed])
         .pipe(gulp.dest(paths.images.dest));
 
+// Build the responsive images. gulp-responsive uses 'sharp'
 const responsiveImages = () =>
     gulp.src([paths.images.src])
         .pipe(responsive(imageOptions, imageQuality))
         .pipe(gulp.dest(paths.images.dest, {overwrite: false}));
 
+// Task to bundle the image tasks
 gulp.task('images', gulp.series(cleanImages, copyFixedImages, responsiveImages));
 
+// Task to bundle the full build process
 gulp.task('buildAll', gulp.series(['clean',gulp.parallel(['images','buildJS','buildCSS','buildHTML', 'copyFiles'])]));
 
-
+// Task to reload BrowserSync
 const reload = (done) => {
   server.reload();
   done();
 }
 
+// Task to serve via BrowserSync
 const serve = (done) => {
   server.init({
     server: {
@@ -144,25 +160,25 @@ const serve = (done) => {
   done();
 }
 
-// watch HTML changes
+// Watch for HTML changes, rebuild, and reload
 gulp.task('watchHTML', () => {
   return gulp.watch(paths.html.src, gulp.series('buildHTML',reload));
 });
 
-// watch CSS changes
+// Watch for CSS changes, rebuild, and reload
 gulp.task('watchCSS', () => {
   return gulp.watch(paths.styles.src, gulp.series('buildCSS',reload));
 });
 
-// watch JS changes
+// watch JS changes, rebuild, and reload
 gulp.task('watchJS', () => {
   return gulp.watch(`${srcRoot}/**/*.js`, gulp.series('buildJS',reload));
 });
 
-// watch all source Changes
+// bundle the watchers into one task
 gulp.task('watchAll', gulp.parallel('watchHTML', 'watchJS', 'watchCSS'), (done) => {
   done();
 });
 
-// BuildAll, launch app, and watch for changes
+// Default task: BuildAll, launch app with BrowserSync, and watch for changes
 gulp.task('default', gulp.series(['buildAll',serve,'watchAll']));
