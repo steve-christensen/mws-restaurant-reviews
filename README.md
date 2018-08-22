@@ -1,25 +1,50 @@
 # Mobile Web Specialist Certification Course
 ---
-#### _Three Stage Course Material Project - Restaurant Reviews_
+## _Three Stage Course Material Project - Restaurant Reviews_
 
-## API server
+### API server
 The stage 2 code expects that the API server (https://github.com/udacity/mws-restaurant-stage-2) is running on local host port 1337. You'll need for fork and clone the project and then start the server with the command:
 
   ```
   node server
   ```
 
-## Building and serving the app
+### Building and serving the app
 
-### Python SimpleHTTPServer
+#### Python SimpleHTTPServer
 
-To build and serve with Python SimpleHTTPServer, enter 'nmp start' from the command line.
+To build and serve with Python SimpleHTTPServer, enter the following command:
 
-### BrowserSync
+  ```
+  nmp start
+  ```
 
-To launch with BrowserSync, just enter 'gulp' on the command line. The default Gulp tasks will build the application and launch your default browser using BrowserSync. Do not use this method if you're planning to evaluate performance as BrowserSync negatively impacts performance, but it is useful for live editing during development.
+By default, the application will be served at http://localhost:8000/
 
-## Stage 2 Changes
+#### BrowserSync (development only)
+
+The default gulp task will build everything and then launch the app with BrowserSync.
+This negatively impacts performance, so it is only beneficial during development
+and not when evaluating app performance. To start with browser-sync, execute the
+default gulp task:
+
+  ```
+  gulp
+  ```
+
+This will serve the application at http://localhost:3000/
+
+#### BYO Server
+
+If you need to serve the application in another way, you'll need to build the app
+first and then serve from the build directory (./build where '.' is the project
+root). To build the directory, execute the 'buildAll' Gulp task:
+
+  ```
+  gulp buildAll
+  ```
+
+### Stage 2 Changes
 
   - Changed the directory structure to move code to 'src' directory and then build the code in the 'build' directory
 
@@ -43,7 +68,7 @@ To launch with BrowserSync, just enter 'gulp' on the command line. The default G
   - Added icon images
   - Added icon and manifest links in the HTML files
 
-## Stage 1 Changes
+### Stage 1 Changes
 
  - Home page
     - Update to use flex boxes to allow the restaurant list to expand to multiple columns when space is available.
