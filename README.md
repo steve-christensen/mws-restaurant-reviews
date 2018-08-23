@@ -3,10 +3,32 @@
 ## _Three Stage Course Material Project - Restaurant Reviews_
 
 ### API server
-The stage 2 code expects that the API server (https://github.com/udacity/mws-restaurant-stage-2) is running on local host port 1337. You'll need for fork and clone the project and then start the server with the command:
+The stage 2 code expects that the API server (https://github.com/udacity/mws-restaurant-stage-2) is running on local host port 1337. You'll need for fork and clone the project by executing the following sequence of commands:
+
+  ```
+  git clone https://github.com/udacity/mws-restaurant-stage-2.git
+  ```
+
+  ```
+  npm install
+  ```
+After it is installed, you can start the API server with the following command:
 
   ```
   node server
+  ```
+### Installing Restaurant-Review Croject
+
+Clone this project:
+
+  ```
+  git clone https://github.com/steve-christensen/mws-restaurant-reviews.git
+  ```
+
+Install dependencies:
+
+  ```
+  npm install
   ```
 
 ### Building and serving the app
