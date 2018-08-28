@@ -17,7 +17,7 @@ After it is installed, you can start the API server with the following command:
   ```
   node server
   ```
-### Installing Restaurant-Review Croject
+### Installing Restaurant-Review Project
 
 Clone this project:
 
