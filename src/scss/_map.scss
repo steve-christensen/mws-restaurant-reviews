@@ -1,0 +1,39 @@
+
+.map-container {
+	display: block;
+	width: 100%;
+
+  #map {
+    height: 400px;
+    width: 100%;
+		border-radius: $default-border-radius;
+  }
+
+  #map-label {
+  	position: absolute;
+  	left: -9999px;
+  }
+}
+
+.list .map-container {
+	order: -1;
+}
+
+.detail .map-container {
+	width: 50%;
+}
+
+/* adjust height and set a margin around the map to simplify scrolling on small screens */
+@media screen and (max-height: 400px) {
+  #map {
+    height: 100vh;
+  }
+}
+
+.add-review .map-container {
+	display: none;
+}
+
+.error .map-container {
+	display: none;
+}

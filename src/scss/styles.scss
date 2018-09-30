@@ -1,0 +1,78 @@
+@import '_defaults';
+
+body {
+	font:								$default-font;
+  color:							$fg-color-1;
+	background-color:		$bg-color-1;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+}
+
+a:hover {
+  color:    $accent-color-1;
+  text-decoration: underline;
+}
+
+h1, h2, h3 {
+	color: $primary-color;
+}
+
+header {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 70px;
+
+	nav {
+	  width: 100%;
+	  text-align: center;
+		flex-direction: column;
+
+	  h1 {
+
+	  	a {
+	      font-weight: 200;
+	      letter-spacing: 0.3em;
+	      text-transform: uppercase;
+	    }
+	  }
+	}
+}
+
+main {
+  display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: calc(100% - 48px);
+	padding: 0 24px 0 24px;
+}
+
+footer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+  height: calc(60px - 0.8em);
+	text-align: center;
+	padding: 15px 0 0 0;
+  text-transform: uppercase;
+
+	div {
+		font-size: 0.8em;
+	  letter-spacing: 0.1em;
+	}
+}
+
+@import '_map';
+
+@import '_list';
+
+@import '_detail';
+
+@import '_add-review';
+
+@import '_error';

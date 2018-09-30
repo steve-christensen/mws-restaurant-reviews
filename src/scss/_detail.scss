@@ -1,0 +1,117 @@
+@import  '_breadcrumb.scss';
+
+.detail {
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-start;
+
+	.map-container {
+		display: block;
+	}
+
+	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	  width: calc(50% - 1em);
+		padding: 0 1em 0 0;
+		/*	  border-bottom: 1px solid #d9d9d9;
+			  border-top: 1px solid #fff;
+		*/
+
+	  h2 {
+	    letter-spacing: 0;
+	    margin: 0.8em 0 0 0;
+	    text-transform: uppercase;
+	    line-height: 1.1;
+	  }
+
+	  img {
+	  	width: 100%;
+	  	height: auto;
+			border-radius: $default-border-radius;
+	  }
+
+	  figcaption {
+	  	font-style: italic;
+	  	font-size: 1em;
+	  	font-weight: normal;
+	  	text-align: center;
+	  }
+
+	  address {
+	    font-size: 1em;
+	    margin: 1em 0 0;
+	  }
+
+	  .cuisine {
+	    font-size: 1em;
+	    font-weight: 300;
+	    letter-spacing: 10px;
+	    margin: 0.5em 0 0;
+	    text-align: center;
+	    text-transform: uppercase;
+	  	width: 100%;
+	  }
+
+		table {
+			margin: 0.5em 0 0;
+		}
+
+		div {
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+			width: 90%;
+
+			div {
+				width: 48px;
+			}
+
+			.cuisine {
+				display: block;
+				margin: 0;
+			}
+
+			button {
+				width: 48px;
+				height: 48px;
+				font-size: 2.3em;
+				text-align: center;
+				border-radius: 24px;
+				cursor: pointer;
+			}
+
+			button[value="true"] {
+				color: red;
+			}
+		}
+	}
+}
+
+#restaurant-hours td {
+}
+#restaurant-hours td:first-child {
+	padding: 0 25px 0 0;
+}
+
+@import '_reviews.scss';
+
+@media screen and (max-width: 750px) {
+
+	.detail {
+		flex-direction: column;
+
+		.map-container {
+			width: 100%;
+			padding: 0;
+		}
+
+		.content {
+			width: 100%;
+			padding: 0;
+			margin: 0 0 1em;
+		}
+	}
+
+}

@@ -1,0 +1,44 @@
+.breadcrumb {
+    background-color: $accent-color-2;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: white;
+    width: 100%;
+    height: 3em;
+    border-radius: $default-border-radius;
+
+    ul {
+      padding: 0 0 0 1em;
+      list-style: none;
+      font-size: 1em;
+      margin: 0;
+
+      li {
+        display: inline;
+
+        a {
+          font-weight: bold;
+        }
+
+        a:hover {
+          color: white;
+        }
+      }
+
+      li+li:before {
+          padding: 0 8px;
+          content: "/";
+/*          content: "/\00a0";
+*/
+      }
+    }
+}
+
+.list .breadcrumb {
+  display: none;
+}
+
+.error .breadcrumb {
+  display: none;
+}
