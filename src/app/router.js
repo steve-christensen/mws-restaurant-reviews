@@ -44,22 +44,6 @@ class Router {
     window.addEventListener('popstate', (event) => {
       this.render(location);
     });
-
-    // On the beforeunload event, reset the pathname to root and then store
-    // the current path in the state. The render function will pull
-    // the current path from the state if available.
-    window.addEventListener('beforeunload', (event) => {
-      const srcElement = event.srcElement;
-
-      if ((srcElement != document
-        || srcElement.activeElement.localName != 'a'
-        || new URL(srcElement.activeElement.href).origin != location.origin)
-      && location.pathname != '/') {
-        let state = { path: location.pathname };
-        history.replaceState(state, '', '/');
-      }
-    });
-
   }
 
   // This method will be used to call the appropriate function to render the
