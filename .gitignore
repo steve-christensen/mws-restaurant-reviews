@@ -12,3 +12,6 @@ package-lock.json
 
 # ignore temporary backup files
 **/*.bak
+
+# ignore ssl files
+**/*.pem
