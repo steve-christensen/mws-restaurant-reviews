@@ -4,7 +4,7 @@
   "description": "Restaurant Project for Udacity Moble Web Specialist course.",
   "main": "index.html",
   "scripts": {
-    "start": "gulp buildAll; cd build; python -m SimpleHTTPServer",
+    "start": "node server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,15 +18,9 @@
   },
   "homepage": "https://github.com/steve-christensen/mws-restaurant-stage-1#readme",
   "dependencies": {
-    "grunt": "^1.0.3",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-nodeunit": "^2.0.0",
-    "grunt-contrib-uglify": "^3.3.0",
-    "grunt-mkdir": "^1.0.0",
-    "grunt-responsive-images": "^1.10.1",
-    "idb": "^2.1.3"
+    "express": "^4.16.3",
+    "idb": "^2.1.3",
+    "spdy": "^3.4.7"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -35,7 +29,6 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^8.0.0",
-    "browser-sync": "^2.24.6",
     "browserify": "^16.2.2",
     "del": "^3.0.0",
     "gulp": "github:gulpjs/gulp#4.0",
@@ -44,6 +37,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-rename": "^1.4.0",
     "gulp-responsive": "^2.11.0",
+    "gulp-sass": "^4.0.1",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.1",
     "pump": "^3.0.0",

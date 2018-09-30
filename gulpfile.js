@@ -12,10 +12,8 @@ const autoprefixer = require('gulp-autoprefixer');
 const rename = require('gulp-rename');
 const responsive = require('gulp-responsive');
 const concat = require('gulp-concat');
-const browserSync = require('browser-sync');
 const pump = require('pump');
-
-const server = browserSync.create();
+const sass = require('gulp-sass');
 
 const srcRoot = './src';
 const buildRoot = './build';
@@ -27,7 +25,7 @@ const paths = {
       dest: `${buildRoot}/`
     },
     styles: {
-      src: `${srcRoot}/css/**/*.css`,
+      src: `${srcRoot}/scss/**/*.scss`,
       dest: `${buildRoot}/css/`
     },
     js: {
@@ -36,7 +34,11 @@ const paths = {
       dest: `${buildRoot}/`
     },
     files: {
-      src: `${srcRoot}/**/*.json`
+      src: [`${srcRoot}/**/*.json`, `${srcRoot}/**/*.js`]
+    },
+    idb: {
+      src: './node_modules/idb/lib/idb.js',
+      dest: `${buildRoot}/lib/`
     },
     images: {
       src: `${srcRoot}/img_src/*.jpg`,
@@ -76,7 +78,13 @@ gulp.task('clean', () => del([buildRoot]));
 gulp.task('copyFiles', () =>
   gulp.src(paths.files.src)
       .pipe(gulp.dest(buildRoot))
-  );
+);
+
+// Copy idb.js
+gulp.task('idbCopy', () =>
+  gulp.src(paths.idb.src)
+      .pipe(gulp.dest(paths.idb.dest))
+);
 
 // Build the Javascript via browserify, babel, and uglify
 // Added pump because it generates better error messages
@@ -110,6 +118,7 @@ gulp.task('buildJS', (cb) => {
   ],cb);
 });
 
+
 // Build the HTML, for now, it just copies the files
 gulp.task('buildHTML', () =>
     gulp.src([paths.html.src])
@@ -118,7 +127,8 @@ gulp.task('buildHTML', () =>
 // Build the CSS. I could use sass and add that compilation here
 gulp.task('buildCSS', () =>
     gulp.src([paths.styles.src])
-        .pipe(clean_css({ sourceMap: true}))
+//        .pipe(sass({ outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(sass({ includePaths: [`${buildRoot}/scss`]}).on('error', sass.logError))
         .pipe(autoprefixer('last 2 version'))
         .pipe(rename({ suffix: '.min'}))
         .pipe(gulp.dest(paths.styles.dest)));
@@ -142,7 +152,8 @@ const responsiveImages = () =>
 gulp.task('images', gulp.series(cleanImages, copyFixedImages, responsiveImages));
 
 // Task to bundle the full build process
-gulp.task('buildAll', gulp.series(['clean',gulp.parallel(['images','buildJS','buildCSS','buildHTML', 'copyFiles'])]));
+//gulp.task('buildAll', gulp.series(['clean',gulp.parallel(['images','buildJS','buildCSS','buildHTML', 'copyFiles'])]));
+gulp.task('buildAll', gulp.series(['clean',gulp.parallel(['images','buildCSS','buildHTML', 'copyFiles'])]));
 
 // Task to reload BrowserSync
 const reload = (done) => {
@@ -150,35 +161,5 @@ const reload = (done) => {
   done();
 }
 
-// Task to serve via BrowserSync
-const serve = (done) => {
-  server.init({
-    server: {
-      baseDir: buildRoot
-    }
-  });
-  done();
-}
-
-// Watch for HTML changes, rebuild, and reload
-gulp.task('watchHTML', () => {
-  return gulp.watch(paths.html.src, gulp.series('buildHTML',reload));
-});
-
-// Watch for CSS changes, rebuild, and reload
-gulp.task('watchCSS', () => {
-  return gulp.watch(paths.styles.src, gulp.series('buildCSS',reload));
-});
-
-// watch JS changes, rebuild, and reload
-gulp.task('watchJS', () => {
-  return gulp.watch(`${srcRoot}/**/*.js`, gulp.series('buildJS',reload));
-});
-
-// bundle the watchers into one task
-gulp.task('watchAll', gulp.parallel('watchHTML', 'watchJS', 'watchCSS'), (done) => {
-  done();
-});
-
 // Default task: BuildAll, launch app with BrowserSync, and watch for changes
-gulp.task('default', gulp.series(['buildAll',serve,'watchAll']));
+gulp.task('default', gulp.series(['buildAll']));

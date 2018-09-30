@@ -9,3 +9,6 @@ package-lock.json
 
 # ignore .directory
 .directory
+
+# ignore temporary backup files
+**/*.bak
