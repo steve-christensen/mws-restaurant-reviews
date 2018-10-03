@@ -95,7 +95,7 @@ class AddReviewView extends BaseView {
       if (restaurant) {
         this.bc.reset();
         this.bc.addCrumb(restaurant.name, `#/restaurant/${restaurant.tag}`);
-        this.bc.addCrumb('add_review', '');
+        this.bc.addCrumb('Add Review', '');
         this.bc.render();
 
         this.renderForm(restaurant);

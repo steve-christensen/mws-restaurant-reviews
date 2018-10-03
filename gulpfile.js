@@ -154,7 +154,7 @@ gulp.task('images', gulp.series(cleanImages, copyFixedImages, responsiveImages))
 
 // Task to bundle the full build process
 //gulp.task('buildAll', gulp.series(['clean',gulp.parallel(['images','buildJS','buildCSS','buildHTML', 'copyFiles'])]));
-gulp.task('buildAll', gulp.series(['clean',gulp.parallel(['images','buildCSS','buildHTML', 'copyFiles'])]));
+gulp.task('buildAll', gulp.series(['clean',gulp.parallel(['images','idbCopy','buildCSS','buildJS','buildHTML', 'copyFiles'])]));
 
 // Task to reload BrowserSync
 const reload = (done) => {
