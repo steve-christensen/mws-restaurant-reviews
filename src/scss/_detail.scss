@@ -7,13 +7,21 @@
 
 	.map-container {
 		display: block;
+
+		#map {
+			height: calc(100vh - 130px - 4em);
+		}
 	}
 
 	.content {
 		display: flex;
-		flex-direction: column;
-		align-items: center;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: flex-start;
+		justify-content: center;
 	  width: calc(50% - 1em);
+		height: calc(100vh - 130px - 3em);
+		overflow-y: scroll;
 		padding: 0 1em 0 0;
 		/*	  border-bottom: 1px solid #d9d9d9;
 			  border-top: 1px solid #fff;
@@ -42,6 +50,8 @@
 	  address {
 	    font-size: 1em;
 	    margin: 1em 0 0;
+			width: 100%;
+			text-align: center;
 	  }
 
 	  .cuisine {
@@ -55,7 +65,9 @@
 	  }
 
 		table {
+			width: 100%;
 			margin: 0.5em 0 0;
+			text-align: center;
 		}
 
 		div {
@@ -83,7 +95,7 @@
 			}
 
 			button[value="true"] {
-				color: red;
+				color: #9c0000;
 			}
 		}
 	}
@@ -105,12 +117,40 @@
 		.map-container {
 			width: 100%;
 			padding: 0;
+			height: 300px;
 		}
 
 		.content {
 			width: 100%;
 			padding: 0;
 			margin: 0 0 1em;
+			height: auto;
+			overflow-y: auto;
+		}
+	}
+
+}
+
+@media screen and (max-height: calc(400px + 3em)) {
+
+	.detail {
+		flex-direction: column;
+
+		.map-container {
+			width: 100%;
+			padding: 0;
+
+			#map {
+				height: 300px;
+			}
+		}
+
+		.content {
+			width: 100%;
+			padding: 0;
+			margin: 0 0 1em;
+			height: auto;
+			overflow-y: auto;
 		}
 	}
 

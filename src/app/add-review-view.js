@@ -132,17 +132,17 @@ class AddReviewView extends BaseView {
 
     this.form.insertAdjacentHTML('beforeend','<p>All fields are required.</p>')
 
-    this.form.insertAdjacentHTML('beforeend', '<label for="name">Name:</label><br>');
+    this.form.insertAdjacentHTML('beforeend', '<label for="name">Name:<br>');
     this.form.append(this.name);
-    this.form.insertAdjacentHTML('beforeend', '<span class="validity"></span>');
+    this.form.insertAdjacentHTML('beforeend', '<span class="validity"></span></label>');
 
-    this.form.insertAdjacentHTML('beforeend', '<br><br><label for="rating">Rating:</label><br>');
+    this.form.insertAdjacentHTML('beforeend', '<br><br><label for="rating">Rating:<br>');
     this.form.append(this.rating);
     this.form.append(this.stars);
 
-    this.form.insertAdjacentHTML('beforeend', '<br><br><label for="comments">Comments:</label><br>');
+    this.form.insertAdjacentHTML('beforeend', '</label><br><br><label for="comments">Comments:<br>');
     this.form.append(this.comments);
-    this.form.insertAdjacentHTML('beforeend', '<span class="validity"></span><br><br>');
+    this.form.insertAdjacentHTML('beforeend', '<span class="validity"></span></label><br><br>');
 
     this.form.append(this.submit);
 
