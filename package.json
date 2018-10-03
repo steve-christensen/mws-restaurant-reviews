@@ -2,9 +2,11 @@
   "name": "mws-restaurant-stage-1",
   "version": "1.0.0",
   "description": "Restaurant Project for Udacity Moble Web Specialist course.",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
+    "build": "gulp",
     "start": "node server",
+    "start-python": "cd build; python -m SimpleHTTPServer 8001",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

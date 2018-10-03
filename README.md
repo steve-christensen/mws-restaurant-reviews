@@ -2,6 +2,83 @@
 ---
 ## _Three Stage Course Material Project - Restaurant Reviews_
 
+## Stage 3
+
+For stage 3, I have rewritten nearly everything from Stage 2 to create a single page web
+application. I have also implemented HTTPS via Spdy and for the reviewers convenience,
+the certificate is generated on the fly thanks to the 'pem' module. I also used Sass for the first time in a project and I'm now hooked. It was so much easier to manage the CSS.
+
+So, to install, and run:
+
+ 1. Clone this project from git.
+  '''
+  git clone https://github.com/steve-christensen/mws-restaurant-reviews.git
+  '''
+
+ 1. Install dependencies.
+  '''
+  npm install
+  '''
+
+1. Build the project
+  '''
+  npm build
+  '''
+
+1. Start the server (Option 1: HTTP2! very fast)
+  '''
+  npm start
+  '''
+  Open your browser to https://localhost:8002/
+  You will probably get a security warning. Please opt to trust me and continue to the site.
+
+1. Start the server (Option 2: python HTTP)
+  '''
+  npm start-python
+  '''
+  Open your browser to http://localhost:8001/
+
+
+### Requirements
+
+#### Functionality
+
+Criteria | Meets Specifications
+---------|---------------------
+User Interface | Users are able to mark a restaurant as a favorite, this toggle is visible in the application. A form is added to allow users to add their own reviews for a restaurant. Form submission works properly and adds a new review to the database.
+Offline Use | The client application works offline. JSON responses are cached using the IndexedDB API. Any data previously accessed while connected is reachable while offline. User is able to add a review to a restaurant while offline and the review is sent to the server when connectivity is re-established.
+
+
+#### Responsive Design and Accessibility
+
+Criteria | Meets Specifications
+---------|---------------------
+Responsive Design | The application maintains a responsive design on mobile, tablet and desktop viewports. All new features are responsive, including the form to add a review and the control for marking a restaurant as a favorite.
+Accessibility | The application retains accessibility features from the previous projects. Images have alternate text, the application uses appropriate focus management for navigation, and semantic elements and ARIA attributes are used correctly. Roles are correctly defined for all elements of the review form.
+
+
+#### Performance
+
+Criteria | Meets Specifications
+---------|---------------------
+Site Performance | Lighthouse targets for each category exceed: <br><br> Progressive Web App: >90 <br> Performance: >90 <br> Accessibility: >90
+
+
+### Extras
+
+In addition to the course requirements, I wanted to learn a few other things. I actually implemented these self-imposed requirements first.
+
+Criteria | Motivation & Implementation
+---------|---------------------
+Single-Page App | Though we couldn't use a framework, from the beginning, I thought this app might be nice as a single page app. So, I created my own router and view modules,  modified index.html to use them, and eliminated restaurant.html.
+Sass | I've wanted to learn Sass for a long time. We had a brief introduction to Sass in the course, but the only way to learn it and gain experience is to use it.
+HTTP2 | In order to handle deep linking or direct entry of detail page URLs in the address bar, I needed my own server to route those links to index.html for routing, so I implemented it using HTTP2 which also required setting up SSL.
+Heroku (maybe) | After deploying a simple app to Heroku in one of the lessons, it might be nice to deploy this app to Heroku when finished.
+
+___
+
+## Stage 2
+
 ### API server
 The stage 2 code expects that the API server (https://github.com/udacity/mws-restaurant-stage-2) is running on local host port 1337. You'll need for fork and clone the project by executing the following sequence of commands:
 
