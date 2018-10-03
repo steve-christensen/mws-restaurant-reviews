@@ -74,7 +74,7 @@ class ListView extends BaseView {
     li.append(name);
 
     const favorite = document.createElement('p');
-    favorite.setAttribute('favorite', restaurant.is_favorite);
+    favorite.setAttribute('favorite', restaurant.is_favorite && restaurant.is_favorite != "false");
     favorite.innerHTML = restaurant.is_favorite && restaurant.is_favorite != "false" ? '❤' : '♡';
     li.append(favorite);
 

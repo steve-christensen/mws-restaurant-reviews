@@ -69,9 +69,9 @@ class AddReviewView extends BaseView {
       event.preventDefault();
 
       const review = {
-        restaurant_id: this.form.getAttribute('restaurant_id'),
+        restaurant_id: Number(this.form.getAttribute('restaurant_id')),
         name: this.name.value,
-        rating: this.rating.value,
+        rating: Number(this.rating.value),
         comments: this.comments.value
       };
 
@@ -94,7 +94,7 @@ class AddReviewView extends BaseView {
     db.fetchRestaurantByTag(tag).then(restaurant => {
       if (restaurant) {
         this.bc.reset();
-        this.bc.addCrumb(restaurant.name, `/restaurant/${restaurant.tag}`);
+        this.bc.addCrumb(restaurant.name, `#/restaurant/${restaurant.tag}`);
         this.bc.addCrumb('add_review', '');
         this.bc.render();
 
@@ -123,6 +123,7 @@ class AddReviewView extends BaseView {
   * Add the form to the content section
   **/
   renderForm(restaurant) {
+    this.form.innerHTML = '';
     this.content.insertAdjacentHTML('beforeend',`<h2>Enter review for ${restaurant.name}</h2>`);
 
     this.form.setAttribute('restaurant_id', restaurant.id);
@@ -165,7 +166,7 @@ class AddReviewView extends BaseView {
   * from the resulting array
   **/
   getTagFromLocation() {
-    let a = location.pathname.split('/')
+    let a = location.hash.slice(1).split('/')
     return a[a.length-2];
   }
 }

@@ -29,7 +29,7 @@ const paths = {
       dest: `${buildRoot}/css/`
     },
     js: {
-      src: `${srcRoot}/**/*.js`,
+      src: `${srcRoot}/service-worker.js`,
       exclude: `!${srcRoot}/lib/**/*.js`,
       dest: `${buildRoot}/`
     },
@@ -107,13 +107,14 @@ gulp.task('buildJS', (cb) => {
                     }
                 });
         }),
-        sourcemaps.init({loadMaps: true}),
+/*        sourcemaps.init({loadMaps: true}),
         uglify(),
         sourcemaps.write('./'),
         rename((path) =>
           {
             path.basename += path.extname == '.map' ? '' : '.min';
           }),
+*/
         gulp.dest(paths.js.dest)
   ],cb);
 });

@@ -37,6 +37,8 @@ class Breadcrumb {
     // empty the crumbs array
     this.crumbs.length = 0;
 
+    this.crumbList.innerHTML = '';
+
     // Restore 'Home' to the crumb array
     this.addCrumb('Home', '/');
   }

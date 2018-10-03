@@ -16,6 +16,7 @@ class BaseView {
   */
   renderView() {
     this.reset();
+    window.scrollTo(0,0);
   }
 
   /*

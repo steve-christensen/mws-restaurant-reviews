@@ -94,7 +94,7 @@ class DetailView extends BaseView {
     const reviewContainer = document.createElement('div');
     reviewContainer.className='reviews-container';
     reviewContainer.insertAdjacentHTML('beforeend','<h3>Reviews</h3>');
-    reviewContainer.insertAdjacentHTML('beforeend',`<a class="review-button" href="/restaurant/${restaurantTag}/add_review">Add Review</a>`);
+    reviewContainer.insertAdjacentHTML('beforeend',`<a class="review-button" href="#/restaurant/${restaurantTag}/add_review">Add Review</a>`);
 
     const reviewList = document.createElement('ul');
     reviewContainer.append(reviewList);
@@ -133,8 +133,13 @@ class DetailView extends BaseView {
         li.appendChild(ratingP);
 
         const date = document.createElement('p');
-        date.innerHTML = new Date(review.createdAt).toDateString();
         date.className = 'review-date';
+        if (review.createdAt) {
+          date.innerHTML = new Date(review.createdAt).toDateString();
+        }
+        else {
+          date.innerHTML = 'pending';
+        }
         li.appendChild(date);
 
         const comments = document.createElement('p');
@@ -157,7 +162,7 @@ class DetailView extends BaseView {
       ,`<p class="cuisine">${restaurant.cuisine_type}</p>`);
 
     this.favoriteButton.setAttribute('restaurant_id',restaurant.id);
-    this.favoriteButton.setAttribute('value', restaurant.is_favorite ? 'true' : 'false');
+    this.favoriteButton.setAttribute('value', restaurant.is_favorite && restaurant.is_favorite != "false" ? 'true' : 'false');
 
     div.append(this.favoriteButton);
 
@@ -255,7 +260,7 @@ class DetailView extends BaseView {
   * from the resulting array
   **/
   getTagFromLocation() {
-    let a = location.pathname.split('/')
+    let a = location.hash.slice(1).split('/')
     return a[a.length-1];
   }
 

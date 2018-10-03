@@ -17,6 +17,8 @@ import MapControl from './map-control.js';
 
 import DBHelper from './dbhelper.js';
 
+loadServiceWorker();
+
 // Create one instance of DBHelper and pass to list and detail views.
 const db = new DBHelper();
 
@@ -50,3 +52,33 @@ router.addRoute(/^\/restaurant\/[^\/#?&]*\/add_review/, addReviewView);
 
 // Call the render function directly to render the first view
 router.render(location);
+
+function loadServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then(function(registration) {
+
+      var serviceWorker;
+      if (registration.installing) {
+        serviceWorker = registration.installing;
+      } else if (registration.waiting) {
+        serviceWorker = registration.waiting;
+      } else if (registration.active) {
+        serviceWorker = registration.active;
+      }
+
+      if (serviceWorker) {
+        console.log('ServiceWorker state: ' + serviceWorker.state);
+        serviceWorker.addEventListener('statechange', function(e) {
+          console.log('ServiceWorker state: ' + serviceWorker.state);
+        });
+      }
+    }).catch(function(error) {
+      // Something went wrong during registration. The service-worker.js file
+      // might be unavailable or contain a syntax error.
+      console.log('ServiceWorker registration failed: ' + error);
+    });
+  } else {
+    // The current browser doesn't support service workers.
+    console.log('ServiceWorkers are not available in this browser');
+  }
+}

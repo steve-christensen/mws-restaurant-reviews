@@ -44,14 +44,15 @@ class Router {
     window.addEventListener('popstate', (event) => {
       this.render(location);
     });
+
   }
 
   // This method will be used to call the appropriate function to render the
   // view
   render(url, current) {
-    let newPath = url.pathname;
+    let newPath = url.hash && url.hash != '#' ? url.hash.slice(1) : '/';
 
-    if (url.pathname == '/') {
+/*    if (url.pathname == '/') {
       // Handle the case where navigation is returning from external site
       // using browser forward or back button
       if (history.state && history.state.path && (!current || history.state.path != current.pathname)) {
@@ -59,6 +60,7 @@ class Router {
         history.replaceState(null, '', newPath);
       }
     }
+*/
 
     // Check the route against the routes array.
     let route = this.findRoute(newPath);
@@ -75,8 +77,23 @@ class Router {
     // events for all internal links.
     document.querySelectorAll('a').forEach((el => {
       let url = new URL(el.href);
-      if (url.origin === location.origin && !location.hash) {
-        el.addEventListener('click', (event) => {
+      if (url.origin === location.origin && location.hash != '#') {
+        el.addEventListener('click', event => {
+          const target = event.currentTarget;
+          // Do nothing if ctrl, meta, alt, or shift keys were pressed
+          if (!event.ctrlKey &&
+              !event.metaKey &&
+              !event.altKey &&
+              !event.shiftKey) {
+            event.preventDefault();
+            let next = new URL(target.href);
+
+            history.pushState(null,'',next);
+
+            this.render(next, location);
+          }
+        });
+/*        el.addEventListener('click', (event) => {
           let target = event.currentTarget;
 
           // Do nothing if ctrl, meta, alt, or shift keys were pressed
@@ -92,7 +109,7 @@ class Router {
             this.render(next, location);
           }
         });
-      }
+*/      }
     }));
   }
 
