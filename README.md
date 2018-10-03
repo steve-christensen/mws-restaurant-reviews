@@ -11,31 +11,38 @@ the certificate is generated on the fly thanks to the 'pem' module. I also used 
 So, to install, and run:
 
   1. Clone this project from git.
+
     ```
     git clone https://github.com/steve-christensen/mws-restaurant-reviews.git
     ```
 
   2. Install dependencies.
+
     ```
     npm install
     ```
 
   3. Build the project
+
     ```
     npm build
     ```
 
   1. Start the server (Option 1: HTTP2! very fast)
+
     ```
     npm start
     ```
+
     Open your browser to https://localhost:8002/
     You will probably get a security warning. Please opt to trust me and continue to the site.
 
   1. Start the server (Option 2: python HTTP)
+
     ```
     npm start-python
     ```
+    
     Open your browser to http://localhost:8001/
 
 
